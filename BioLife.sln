@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37216.2 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BioLife.Domain", "BioLife.Domain\BioLife.Domain.csproj", "{077D9944-F13F-46C8-BB5C-13E461B59663}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BioLife.Application", "BioLife.Application\BioLife.Application.csproj", "{FCB58E12-881D-44C4-BF4E-A39C3AD3D79B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BioLife.Infrastructure", "BioLife.Infrastructure\BioLife.Infrastructure.csproj", "{1A42E983-2053-4D18-A2B8-CE50CA9EF897}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BioLife.Persistence", "BioLife.Persistence\BioLife.Persistence.csproj", "{505CF067-0A3C-40E8-906E-87F192A2FE11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BioLife.MVC", "BioLife.MVC\BioLife.MVC.csproj", "{E7149778-E027-47D5-987D-D1BB42993F24}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{077D9944-F13F-46C8-BB5C-13E461B59663}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{077D9944-F13F-46C8-BB5C-13E461B59663}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{077D9944-F13F-46C8-BB5C-13E461B59663}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{077D9944-F13F-46C8-BB5C-13E461B59663}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCB58E12-881D-44C4-BF4E-A39C3AD3D79B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCB58E12-881D-44C4-BF4E-A39C3AD3D79B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCB58E12-881D-44C4-BF4E-A39C3AD3D79B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCB58E12-881D-44C4-BF4E-A39C3AD3D79B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A42E983-2053-4D18-A2B8-CE50CA9EF897}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A42E983-2053-4D18-A2B8-CE50CA9EF897}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A42E983-2053-4D18-A2B8-CE50CA9EF897}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A42E983-2053-4D18-A2B8-CE50CA9EF897}.Release|Any CPU.Build.0 = Release|Any CPU
+		{505CF067-0A3C-40E8-906E-87F192A2FE11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{505CF067-0A3C-40E8-906E-87F192A2FE11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{505CF067-0A3C-40E8-906E-87F192A2FE11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{505CF067-0A3C-40E8-906E-87F192A2FE11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7149778-E027-47D5-987D-D1BB42993F24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7149778-E027-47D5-987D-D1BB42993F24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7149778-E027-47D5-987D-D1BB42993F24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7149778-E027-47D5-987D-D1BB42993F24}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{077D9944-F13F-46C8-BB5C-13E461B59663} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{FCB58E12-881D-44C4-BF4E-A39C3AD3D79B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{1A42E983-2053-4D18-A2B8-CE50CA9EF897} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{505CF067-0A3C-40E8-906E-87F192A2FE11} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{E7149778-E027-47D5-987D-D1BB42993F24} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DFEF5187-6765-45F5-9AE0-C2DDF04459FC}
+	EndGlobalSection
+EndGlobal

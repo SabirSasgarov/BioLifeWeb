@@ -1,0 +1,9 @@
+﻿global using Microsoft.Extensions.DependencyInjection;
+global using BioLife.Application.Common.Interfaces;
+global using BioLife.Domain.Entity;
+global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore;
+global using BioLife.Domain.Common;
+global using Microsoft.Extensions.Configuration;
+global using BioLife.Persistence.Contexts;
+global using Microsoft.AspNetCore.Identity;

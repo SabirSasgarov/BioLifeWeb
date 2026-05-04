@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Email Confirmed";
+}
+
+<!--Hero Section-->
+<div class="hero-section hero-background">
+    <h1 class="page-title">Email Confirmed</h1>
+</div>
+
+<!--Navigation section-->
+<div class="container">
+    <nav class="biolife-nav">
+        <ul>
+            <li class="nav-item"><a asp-controller="Home" asp-action="Index" class="permal-link">Home</a></li>
+            <li class="nav-item"><span class="current-page">Email Confirmation</span></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="page-contain" style="margin-top: 30px; margin-bottom: 50px;">
+    <div id="main-content" class="main-content">
+        <div class="container mt-5 mb-5">
+            <div class="row justify-content-center" style="display: flex;">
+                <div class="col-md-8 col-lg-6" style="margin: 0 auto;">
+                    <div class="card shadow-sm" style="border: 1px solid #e1e1e1; padding: 40px; border-radius: 5px; text-align: center;">
+                        <div class="card-body p-4">
+                            <i class="fa fa-check-circle" style="font-size: 60px; color: #7faf51; margin-bottom: 20px; display: block;"></i>
+                            <h2 class="text-center mb-4" style="margin-bottom: 20px;">Email Confirmed!</h2>
+                            <p class="mb-4" style="margin-bottom: 30px; font-size: 16px;">
+                                Thank you for confirming your email address. Your account is now fully active.
+                            </p>
+                            <a asp-controller="Account" asp-action="Login" class="btn btn-submit btn-bold" style="padding: 12px 30px; background-color: #7faf51; color: white; border: none; font-weight: bold; text-transform: uppercase;">
+                                Login to your account
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
