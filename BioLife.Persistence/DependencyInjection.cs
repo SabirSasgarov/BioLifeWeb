@@ -1,4 +1,5 @@
-﻿using BioLife.Infrastructure.Services;
+﻿using BioLife.Application.Services;
+using BioLife.Infrastructure.Services;
 
 namespace BioLife.Persistence
 {
@@ -24,6 +25,7 @@ namespace BioLife.Persistence
 
 			services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());
 			services.AddScoped<IEmailService, EmailService>();
+			services.AddScoped<IBasketService, BasketService>();
 			return services;
 		}
 	}

@@ -13,6 +13,7 @@ namespace BioLife.MVC
 			builder.Services.AddControllersWithViews();
 			builder.Services.AddApplicationServices();
 			builder.Services.AddPersistence(builder.Configuration);
+           builder.Services.AddScoped<BioLife.MVC.Services.IAccountService, BioLife.MVC.Services.AccountService>();
 			builder.Services.AddAuthentication().AddGoogle(options =>
 			{
 				options.ClientId = builder.Configuration["Authentication:Google:ClientId"];

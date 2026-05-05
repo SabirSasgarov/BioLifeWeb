@@ -29,6 +29,39 @@ namespace BioLife.MVC.Models
 		[Display(Name = "Confirm password")]
 		[Compare("Password", ErrorMessage = "Passwords do not match.")]
 		public string ConfirmPassword { get; set; }
-
 	}
+
+	public class TwoFactorViewModel
+	{
+		[Required]
+		public string Code { get; set; }
+		public string? ReturnUrl { get; set; }
+		public bool RememberMe { get; set; }
+	}
+
+	public class ForgotPasswordViewModel
+	{
+		[Required]
+		[EmailAddress]
+		public string Email { get; set; }
+	}
+
+	public class ResetPasswordViewModel
+	{
+		[Required]
+		[EmailAddress]
+		public string Email { get; set; }
+		[Required]
+		public string Token { get; set; }
+		[Required]
+		[StringLength(100, MinimumLength = 6)]
+		[DataType(DataType.Password)]
+		public string Password { get; set; }
+		[DataType(DataType.Password)]
+		[Display(Name = "Confirm password")]
+		[Compare("Password", ErrorMessage = "Passwords do not match.")]
+		public string ConfirmPassword { get; set; }
+	}
+
+
 }

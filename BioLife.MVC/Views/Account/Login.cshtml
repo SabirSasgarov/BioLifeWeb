@@ -39,11 +39,14 @@
                                     <input asp-for="Password" class="form-control txt-input" id="Password" name="Password" required placeholder="Enter your password" style="width: 100%; padding: 10px; border: 1px solid #ddd;" />
                                     <span asp-validation-for="Password" class="text-danger"></span>
                                 </div>
-                                <div class="form-check mb-3" style="margin-bottom: 15px;">
-                                    <input asp-for="RememberMe" class="form-check-input" id="RememberMe" name="RememberMe" value="true" />
-                                    <label class="form-check-label" asp-for="RememberMe">Remember me</label>
-                                    <span asp-validation-for="RememberMe" class="text-danger"></span>
+                                <div class="form-check mb-3" style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <input asp-for="RememberMe" class="form-check-input" id="RememberMe" name="RememberMe" value="true" />
+                                        <label class="form-check-label" asp-for="RememberMe">Remember me</label>
+                                    </div>
+                                    <a asp-controller="Account" asp-action="ForgotPassword" style="color: #7faf51; font-size: 14px;">Forgot password?</a>
                                 </div>
+                                <span asp-validation-for="RememberMe" class="text-danger d-block mb-3"></span>
                                 <button type="submit" class="btn btn-submit btn-bold" style="width: 100%; padding: 10px; background-color: #7faf51; color: white; border: none; font-weight: bold;">Login</button>
                             </form>
 
