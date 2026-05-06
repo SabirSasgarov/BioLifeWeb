@@ -109,7 +109,8 @@
                 $btn_scroll_top.removeClass('showUp');
             }
         });
-        $btn_scroll_top.on('click', function () {
+        $btn_scroll_top.on('click', function (e) {
+            e.preventDefault();
             $('html, body').animate({
                 scrollTop: 0
             }, 1500);

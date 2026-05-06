@@ -20,10 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Manage\Views\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\BioLife.Application\BioLife.Application.csproj" />
     <ProjectReference Include="..\BioLife.Persistence\BioLife.Persistence.csproj" />
     <ProjectReference Include="..\BioLife.Infrastructure\BioLife.Infrastructure.csproj" />

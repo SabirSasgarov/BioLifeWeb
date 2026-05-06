@@ -15,7 +15,7 @@ namespace BioLife.MVC.Controllers
 {
 	public class AccountController : Controller
 	{
-     private const string TwoFactorRememberOnceCachePrefix = "2FA_RememberOnce_";
+		private const string TwoFactorRememberOnceCachePrefix = "2FA_RememberOnce_";
 		private readonly UserManager<AppUser> _userManager;
 		private readonly SignInManager<AppUser> _signInManager;
 		private readonly RoleManager<AppRole> _roleManager;
@@ -23,6 +23,7 @@ namespace BioLife.MVC.Controllers
 		private readonly IWebHostEnvironment _env;
 		private readonly IMemoryCache _cache;
 		private readonly IAccountService _accountService;
+		private readonly IBasketService _basketService;
 
 		public AccountController(UserManager<AppUser> userManager,
 			SignInManager<AppUser> signInManager,
@@ -30,7 +31,8 @@ namespace BioLife.MVC.Controllers
 			IEmailService emailService,
 			IWebHostEnvironment env,
 			IMemoryCache cache,
-			IAccountService accountService)
+			IAccountService accountService,
+			IBasketService basketService)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
@@ -39,7 +41,20 @@ namespace BioLife.MVC.Controllers
 			_env = env;
 			_cache = cache;
 			_accountService = accountService;
+			_basketService = basketService;
 		}
+		private async Task SetBasketCountCookie(string userId)
+		{
+			var count = await _basketService.GetBasketCountAsync(userId);
+			Response.Cookies.Append("BasketCount", count.ToString(), new CookieOptions
+			{
+				Expires = DateTimeOffset.UtcNow.AddDays(30),
+				HttpOnly = false,
+				Secure = true,
+				SameSite = SameSiteMode.Strict
+			});
+		}
+
 
 		[HttpGet]
 		public IActionResult Login(string? returnUrl = null)
@@ -73,7 +88,7 @@ namespace BioLife.MVC.Controllers
 
 						if (roles.Contains("Member"))
 						{
-                        if (TryConsumeTwoFactorRememberOnce(user.Id))
+							if (TryConsumeTwoFactorRememberOnce(user.Id))
 							{
 								return RedirectToAction("Index", "Home");
 							}
@@ -100,6 +115,12 @@ namespace BioLife.MVC.Controllers
 						{
 							return RedirectToAction(returnUrl);
 						}
+						var loggedUser = await _userManager.FindByEmailAsync(model.Email);
+						if (loggedUser != null)
+						{
+							await SetBasketCountCookie(loggedUser.Id);
+						}
+						//var roles = loggedUser != null ? await _userManager.GetRolesAsync(loggedUser) : [];
 						if (roles.Contains("Admin"))
 							return RedirectToAction("Index", "Home", new { area = "Manage" });
 
@@ -252,6 +273,7 @@ namespace BioLife.MVC.Controllers
 				}
 				await _userManager.AddLoginAsync(user, info);
 				await _signInManager.SignInAsync(user, isPersistent: false);
+				await SetBasketCountCookie(user.Id); 
 
 				if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
 				{
@@ -271,7 +293,9 @@ namespace BioLife.MVC.Controllers
 				return RedirectToAction("Login");
 			}
 			TempData.Keep("2FA_UserId");
+			TempData.Keep("2FA_Session");
 			TempData.Keep("2FA_ReturnUrl");
+			TempData.Keep("2FA_RememberMe");
 
 			return View(new TwoFactorViewModel { ReturnUrl = returnUrl, RememberMe = rememberMe });
 		}
@@ -371,7 +395,8 @@ namespace BioLife.MVC.Controllers
 				return View(model);
 			}
 			_cache.Remove(cacheKey);
-           await _signInManager.SignInAsync(user, model.RememberMe);
+			await _signInManager.SignInAsync(user, model.RememberMe);
+			await SetBasketCountCookie(user.Id);
 			if (model.RememberMe)
 			{
 				SetTwoFactorRememberOnce(user.Id);
@@ -414,7 +439,7 @@ namespace BioLife.MVC.Controllers
 			if (ModelState.IsValid)
 			{
 				var linkTemplate = Url.Action("ResetPassword", "Account", new { token = "{{Token}}", email = model.Email }, Request.Scheme);
-				if (linkTemplate != null) 
+				if (linkTemplate != null)
 				{
 					await _accountService.RequestPasswordResetAsync(model.Email, linkTemplate);
 				}
@@ -449,7 +474,7 @@ namespace BioLife.MVC.Controllers
 			{
 				return View(model);
 			}
-			
+
 			var result = await _accountService.ResetPasswordAsync(model.Email, model.Token, model.Password);
 			if (result.Succeeded)
 			{

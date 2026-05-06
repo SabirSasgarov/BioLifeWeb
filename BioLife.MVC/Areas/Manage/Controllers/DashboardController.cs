@@ -3,7 +3,7 @@
 namespace BioLife.MVC.Areas.Manage.Controllers
 {
 	[Area("Manage")]
-	public class HomeController : Controller
+	public class DashboardController : Controller
 	{
 		public IActionResult Index()
 		{

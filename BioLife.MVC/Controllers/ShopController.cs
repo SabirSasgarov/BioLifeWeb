@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BioLife.Application.Common.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BioLife.MVC.Controllers
 {
-	public class ShopController : Controller
+	public class ShopController(IProductService productService) : Controller
 	{
-		public IActionResult Index()
+		private readonly IProductService _productService = productService;
+
+		public async Task<IActionResult> Index()
 		{
-			return View();
+			var products = await _productService.GetAllAsync();
+			return View(products);
 		}
 		public IActionResult Details()
 		{

@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="~/assets/css/slick.min.css">
     <link rel="stylesheet" href="~/assets/css/style.css">
     <link rel="stylesheet" href="~/assets/css/main-color01.css">
+    <link rel="stylesheet" href="~/css/site.css">
 </head>
 <body class="biolife-body">
 
@@ -373,9 +374,9 @@
                     <div class="col-lg-6 col-md-6 hidden-sm hidden-xs md-possition-initial">
                         <div class="primary-menu">
                             <ul class="menu biolife-menu clone-main-menu clone-primary-menu" id="primary-menu" data-menuname="main menu">
-                                <li class="menu-item"><a href="#">Home</a></li>
+                                <li class="menu-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
                                 <li class="menu-item menu-item-has-children has-megamenu">
-                                    <a href="#" class="menu-name" data-title="Shop">Shop</a>
+                                    <a asp-controller="Shop" asp-action="Index" class="menu-name" data-title="Shop">Shop</a>
                                     <div class="wrap-megamenu lg-width-900 md-full-width">
                                         <div class="mega-content">
                                             <div class="col-lg-3 col-md-3 col-xs-12 md-margin-bottom-0 xs-margin-bottom-25">
@@ -462,6 +463,7 @@
                                         <li class="menu-item"><a href="#">Seasonal Fruit Plate</a></li>
                                     </ul>
                                 </li>
+                                <li class="menu-item"><a asp-controller="Basket" asp-action="Index" class="menu-name" data-title="Basket">Basket</a></li>
                                 <li class="menu-item menu-item-has-children has-megamenu">
                                     <a href="#" class="menu-name" data-title="Pages">Demo</a>
                                     <div class="wrap-megamenu lg-width-800 md-full-width">
@@ -604,7 +606,7 @@
                     </div>
                     <div class="col-lg-3 col-md-2 col-sm-12 col-xs-12">
                         <div class="logo-for-mobile hidden-lg hidden-md">
-                            <a href="home-01.html" class="biolife-logo"><img src="~/assets/images/logo-biolife-1.png" alt="biolife logo" width="135" height="36"></a>
+                            <a asp-controller="Home" asp-action="Index" class="biolife-logo"><img src="~/assets/images/logo-biolife-1.png" alt="biolife logo" width="135" height="36"></a>
                         </div>
                         <div class="biolife-cart-info center-align-mobile">
                             <div class="mobile-search">
@@ -637,7 +639,7 @@
                                             <span class="qty">8</span>
                                             <span class="sub-total">0 items - $0.00</span>
                                         </div>
-                                        <a href="#" class="btn-to-cart">Go</a>
+                                        <a asp-controller="Basket" asp-action="Index" class="btn-to-cart">Go</a>
                                     </div>
                                     <div class="cart-content">
                                         <div class="cart-inner">
@@ -754,8 +756,8 @@
                                                 </li>
                                             </ul>
                                             <p class="btn-control">
-                                                <a href="#" class="btn view-cart">view cart</a>
-                                                <a href="#" class="btn">checkout</a>
+                                                <a asp-controller="Basket" asp-action="Index" class="btn view-cart">view cart</a>
+                                                <a asp-controller="Checkout" asp-action="Index" class="btn">checkout</a>
                                             </p>
                                         </div>
                                     </div>

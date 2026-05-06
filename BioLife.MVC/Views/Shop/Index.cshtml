@@ -1,5 +1,67 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IReadOnlyList<BioLife.Domain.Entities.Product>
+
 @{
+    ViewData["Title"] = "Shop";
 }
+
+<div class="page-contain has-header-offset">
+    <div id="main-content" class="main-content">
+        <div class="container sm-margin-top-50px xs-margin-top-30px">
+            <div class="biolife-title-box biolife-title-box__icon-at-top-style">
+                <span class="icon-at-top biolife-icon icon-organic"></span>
+                <h3 class="main-title">Shop</h3>
+            </div>
+
+            @if (Model is null || !Model.Any())
+            {
+                <p class="text-center">No products available.</p>
+            }
+            else
+            {
+                <div class="row">
+                    @foreach (var product in Model)
+                    {
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 sm-margin-top-30px">
+                            <div class="contain-product layout-default">
+                                <div class="product-thumb">
+                                    <a asp-controller="Shop" asp-action="Details" asp-route-id="@product.Id" class="link-to-product">
+                                        <img src="@(string.IsNullOrWhiteSpace(product.ImageUrl) ? Url.Content("~/assets/images/products/p-11.jpg") : product.ImageUrl)" alt="@product.Name" width="270" height="270" class="product-thumnail">
+                                    </a>
+                                </div>
+                                <div class="info">
+                                    <b class="categories">@product.Category</b>
+                                    <h4 class="product-title">
+                                        <a asp-controller="Shop" asp-action="Details" asp-route-id="@product.Id" class="pr-name">@product.Name</a>
+                                    </h4>
+                                    <div class="price">
+                                        @if (product.DiscountPrice.HasValue)
+                                        {
+                                            <ins><span class="price-amount"><span class="currencySymbol">£</span>@product.DiscountPrice.Value.ToString("0.00")</span></ins>
+                                            <del><span class="price-amount"><span class="currencySymbol">£</span>@product.Price.ToString("0.00")</span></del>
+                                        }
+                                        else
+                                        {
+                                            <ins><span class="price-amount"><span class="currencySymbol">£</span>@product.Price.ToString("0.00")</span></ins>
+                                        }
+                                    </div>
+                                    <div class="slide-down-box">
+                                        <p class="message">@product.ShortDescription</p>
+                                        <div class="buttons">
+                                            <form asp-controller="Basket" asp-action="Add" method="post" class="add-to-cart-form">
+                                                <input type="hidden" name="productId" value="@product.Id" />
+                                                <input type="hidden" name="quantity" value="1" />
+                                                <button type="submit" class="btn add-to-cart-btn">
+                                                    <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>add to cart
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>

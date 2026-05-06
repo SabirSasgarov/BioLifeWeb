@@ -1,0 +1,28 @@
+.page-contain.has-header-offset {
+    padding-top: 160px;
+}
+
+@media (max-width: 991px) {
+    .page-contain.has-header-offset {
+        padding-top: 120px;
+    }
+}
+
+.btn-scroll-top {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background-color: #333333;
+    color: #ffffff;
+    z-index: 999;
+}
+
+.btn-scroll-top.showUp {
+    display: inline-flex;
+}

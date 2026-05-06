@@ -1,5 +1,8 @@
 using BioLife.Application;
+using BioLife.Domain.Entity;
 using BioLife.Persistence;
+using BioLife.Persistence.Contexts;
+using Microsoft.AspNetCore.Identity;
 
 namespace BioLife.MVC
 {
@@ -19,6 +22,20 @@ namespace BioLife.MVC
 				options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
 				options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
 			});
+			builder.Services.AddIdentity<AppRole, IdentityRole>(opt =>
+			{
+				opt.Password.RequiredLength = 8;
+				opt.Password.RequireDigit = false;
+				opt.Password.RequireLowercase = false;
+				opt.Password.RequireUppercase = false;
+				opt.Password.RequireNonAlphanumeric = false;
+
+				opt.User.RequireUniqueEmail = true;
+				opt.Lockout.MaxFailedAccessAttempts = 3;
+				opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+				opt.Lockout.AllowedForNewUsers = true;
+
+			}).AddEntityFrameworkStores<AppDbContext>();
 
 
 			var app = builder.Build();
@@ -47,7 +64,7 @@ namespace BioLife.MVC
 
 			app.MapControllerRoute(
 				name: "areas",
-				pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+				pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
 
 			app.MapControllerRoute(
 				name: "default",
