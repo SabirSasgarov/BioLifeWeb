@@ -6,7 +6,7 @@
 
 <div class="page-contain has-header-offset">
     <div id="main-content" class="main-content">
-        <div class="container sm-margin-top-50px xs-margin-top-30px">
+        <div class="container sm-margin-top-50px xs-margin-top-30px" style="margin-top:100px;">
             <div class="biolife-title-box biolife-title-box__icon-at-top-style">
                 <span class="icon-at-top biolife-icon icon-organic"></span>
                 <h3 class="main-title">Basket</h3>
@@ -39,7 +39,7 @@
                                     <td class="product-name">
                                         <div class="cart-item">
                                             <div class="thumb">
-                                                <img src="@(string.IsNullOrWhiteSpace(item.ImageUrl) ? Url.Content("~/assets/images/products/p-11.jpg") : item.ImageUrl)" alt="@item.ProductName" width="80" height="80">
+                                                <img src="@(string.IsNullOrWhiteSpace(item.ImageUrl) ? Url.Content("~/assets/images/products/p-11.jpg") : Url.Content($"~/assets/images/products/{item.ImageUrl}"))" alt="@item.ProductName" width="80" height="80">
                                             </div>
                                             <span class="title">@item.ProductName</span>
                                         </div>
@@ -48,11 +48,11 @@
                                     <td class="product-quantity">
                                         <form asp-action="UpdateQuantity" method="post" class="quantity-form">
                                             <input type="hidden" name="productId" value="@item.ProductId" />
-                                            <input type="number" name="quantity" value="@item.Quantity" min="1" class="input-qty" />
+                                            <input type="number" name="quantity" value="@item.Quantity" min="1" step="1" class="input-qty" placeholder="@item.Quantity"/>
                                             <button type="submit" class="btn btn-thin">Update</button>
                                         </form>
                                     </td>
-                                    <td class="product-subtotal">£@item.SubTotal.ToString("0.00")</td>
+                                    <td class="product-subtotal">@item.SubTotal.ToString("0.00")</td>
                                     <td class="product-remove">
                                         <form asp-action="Remove" method="post">
                                             <input type="hidden" name="productId" value="@item.ProductId" />
@@ -70,10 +70,11 @@
                         <a asp-controller="Shop" asp-action="Index" class="btn btn-bold">Continue shopping</a>
                     </div>
                     <div class="col-lg-6 col-md-6 col-xs-12 text-right">
-                        <p class="cart-total">Total: <strong>£@Model.Total.ToString("0.00")</strong></p>
-                        <form asp-action="Clear" method="post" class="clear-cart-form">
+                        <p class="cart-total">Total: <strong>@Model.Total.ToString("0.00")</strong></p>
+                        <form asp-action="Clear" method="post" class="clear-cart-form d-inline-block">
                             <button type="submit" class="btn btn-thin">Clear basket</button>
                         </form>
+                        <a asp-controller="Checkout" asp-action="Index" class="btn btn-bold">Checkout</a>
                     </div>
                 </div>
             }

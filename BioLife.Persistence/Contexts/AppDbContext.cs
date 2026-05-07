@@ -10,6 +10,8 @@ namespace BioLife.Persistence.Contexts
 		public DbSet<Product> Products { get; set; }
 		public DbSet<Basket> Baskets { get; set; }
 		public DbSet<BasketItem> BasketItems { get; set; }
+		public DbSet<Order> Orders { get; set; }
+		public DbSet<OrderItem> OrderItems { get; set; }
 
 
 		public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

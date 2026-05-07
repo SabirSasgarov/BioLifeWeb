@@ -1,0 +1,85 @@
+﻿@model CheckoutViewModel
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="page-contain has-header-offset">
+    <div id="main-content" class="main-content">
+        <div class="container sm-margin-top-50px xs-margin-top-30px" style="margin-top:100px;">
+            <div class="biolife-title-box biolife-title-box__icon-at-top-style">
+                <span class="icon-at-top biolife-icon icon-organic"></span>
+                <h3 class="main-title">Checkout</h3>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-7 col-md-7 col-xs-12">
+                    <form asp-action="PlaceOrder" method="post" class="checkout-form">
+                        <div class="row" style="row-gap: 20px;">
+                            <div class="col-lg-6 col-md-6 col-xs-12">
+                                <label>First name</label>
+                                <input asp-for="FirstName" class="input-text" style="width: 100%; border: 1px solid #e1e1e1; padding: 10px;" />
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-xs-12">
+                                <label>Last name</label>
+                                <input asp-for="LastName" class="input-text" style="width: 100%; border: 1px solid #e1e1e1; padding: 10px;" />
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-xs-12">
+                                <label>Email</label>
+                                <input asp-for="Email" class="input-text" style="width: 100%; border: 1px solid #e1e1e1; padding: 10px;" />
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-xs-12">
+                                <label>Phone</label>
+                                <input asp-for="Phone" class="input-text" style="width: 100%; border: 1px solid #e1e1e1; padding: 10px;" />
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-xs-12">
+                                <label>Address</label>
+                                <input asp-for="Address" class="input-text" style="width: 100%; border: 1px solid #e1e1e1; padding: 10px;" />
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-xs-12">
+                                <label>City</label>
+                                <input asp-for="City" class="input-text" style="width: 100%; border: 1px solid #e1e1e1; padding: 10px;" />
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-xs-12">
+                                <label>Postal code</label>
+                                <input asp-for="PostalCode" class="input-text" style="width: 100%; border: 1px solid #e1e1e1; padding: 10px;" />
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-xs-12">
+                                <label>Country</label>
+                                <input asp-for="Country" class="input-text" style="width: 100%; border: 1px solid #e1e1e1; padding: 10px;" />
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-xs-12">
+                                <label>Note</label>
+                                <textarea asp-for="Note" class="input-text" rows="4" style="width: 100%; border: 1px solid #e1e1e1; padding: 10px;"></textarea>
+                            </div>
+                        </div>
+                        <div class="sm-margin-top-30px">
+                            <button type="submit" class="btn btn-bold">Place order</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-5 col-md-5 col-xs-12 sm-margin-top-30px">
+                    <div class="checkout-summary">
+                        <h4>Order summary</h4>
+                        <ul class="products">
+                            @foreach (var item in Model.Items)
+                            {
+                                <li class="mini-item">
+                                    <div class="item-row">
+                                        <span class="title">@item.ProductName</span>
+                                        <span class="qty">@item.Quantity</span>
+                                        <span class="price">£@item.SubTotal.ToString("0.00")</span>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                        <div class="total-row">
+                            <span>Total</span>
+                            <strong>£@Model.Total.ToString("0.00")</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,109 @@
+﻿@model BioLife.MVC.Helpers.PaginatedList<BioLife.Domain.Entities.Product>
+
+@{
+    ViewData["Title"] = "Manage Products";
+    var search = ViewBag.Search as string;
+    var category = ViewBag.Category as string;
+    var sort = ViewBag.Sort as string;
+    var categories = ViewBag.Categories as List<string> ?? new List<string>();
+}
+
+<h2>Manage Products</h2>
+
+<div class="row mb-3">
+    <div class="col-md-12">
+        <form method="get" asp-action="Index" class="form-inline">
+            <div class="row">
+                <div class="col-md-3">
+                    <input type="text" name="search" value="@search" class="form-control w-100"
+                        placeholder="Search..." />
+                </div>
+                <div class="col-md-3">
+                    <select name="category" class="form-control w-100">
+                        <option value="">All Categories</option>
+                        @foreach (var cat in categories) {
+                            if (cat == category) {
+                                <option value="@cat" selected>@cat</option>
+                            } else {
+                                <option value="@cat">@cat</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="sort" class="form-control w-100">
+                        <option value="">Sort By...</option>
+                        <option value="price_asc" selected="@(sort == "price_asc")">Price: Low-High</option>
+                        <option value="price_desc" selected="@(sort == "price_desc")">Price: High-Low</option>
+                        <option value="name_asc" selected="@(sort == "name_asc")">Name: A-Z</option>
+                        <option value="name_desc" selected="@(sort == "name_desc")">Name: Z-A</option>
+                        <option value="newest" selected="@(sort == "newest")">Newest</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                    <a asp-action="Index" class="btn btn-secondary">Clear</a>
+                    <a asp-action="Create" class="btn btn-success float-right">Create New</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any()) {
+            foreach (var item in Model) {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Category</td>
+                    <td>@item.Price</td>
+                    <td>
+                        <!-- Add actions as needed -->
+                    </td>
+                </tr>
+            }
+        } else {
+            <tr>
+                <td colspan="4" class="text-center">No products found.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-center">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            @if (Model != null && Model.HasPreviousPage) {
+                <li class="page-item">
+                    <a class="page-link"
+                        href="?search=@search&category=@category&sort=@sort&page=@(Model.PageIndex - 1)">Previous</a>
+                </li>
+            }
+
+            @if (Model != null) {
+                for (int i = 1; i <= Model.TotalPages; i++) {
+                    <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                        <a class="page-link"
+                            href="?search=@search&category=@category&sort=@sort&page=@i">@i</a>
+                    </li>
+                }
+            }
+
+            @if (Model != null && Model.HasNextPage) {
+                <li class="page-item">
+                    <a class="page-link"
+                        href="?search=@search&category=@category&sort=@sort&page=@(Model.PageIndex + 1)">Next</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>

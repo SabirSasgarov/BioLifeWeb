@@ -1,5 +1,6 @@
 ﻿using BioLife.Application.Services;
 using BioLife.Infrastructure.Services;
+using BioLife.Persistence.Services;
 
 namespace BioLife.Persistence
 {
@@ -19,6 +20,10 @@ namespace BioLife.Persistence
 				options.Password.RequireNonAlphanumeric = false;
 				options.Password.RequiredLength = 6;
 				options.SignIn.RequireConfirmedEmail = true;
+
+				options.Lockout.MaxFailedAccessAttempts = 3;
+				options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+				options.Lockout.AllowedForNewUsers = true;
 			})
 				.AddEntityFrameworkStores<AppDbContext>()
 				.AddDefaultTokenProviders();
@@ -26,6 +31,7 @@ namespace BioLife.Persistence
 			services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());
 			services.AddScoped<IEmailService, EmailService>();
 			services.AddScoped<IBasketService, BasketService>();
+			services.AddScoped<IOrderService, OrderService>();
 			return services;
 		}
 	}

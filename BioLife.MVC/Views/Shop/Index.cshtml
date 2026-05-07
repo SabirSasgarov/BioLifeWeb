@@ -1,4 +1,4 @@
-﻿@model IReadOnlyList<BioLife.Domain.Entities.Product>
+﻿@model BioLife.MVC.Models.ShopViewModel
 
 @{
     ViewData["Title"] = "Shop";
@@ -6,62 +6,137 @@
 
 <div class="page-contain has-header-offset">
     <div id="main-content" class="main-content">
-        <div class="container sm-margin-top-50px xs-margin-top-30px">
+        <div class="container sm-margin-top-50px xs-margin-top-30px" style="margin-top:100px;">
             <div class="biolife-title-box biolife-title-box__icon-at-top-style">
                 <span class="icon-at-top biolife-icon icon-organic"></span>
-                <h3 class="main-title">Shop</h3>
+                <h3 class="main-title" style="z-index: 1;">Shop</h3>
             </div>
+            
+            <div class="row" style="margin-bottom: 30px;">
+                <!-- Left Sidebar Filters -->
+                <div class="col-md-3 col-sm-12" style="background-color: #f7f6f2; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; height: fit-content;">
+                    <form method="get" asp-action="Index" id="filterForm">
+                        <h4 style="margin-bottom: 20px; color: #333; font-weight: 600;">Filters</h4>
+                        
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label style="font-weight: 600; font-size: 14px; margin-bottom: 8px; display: block;">Search</label>
+                            <input type="text" name="search" value="@Model.Search" onchange="document.getElementById('filterForm').submit();" class="form-control" placeholder="Search products..." style="border-radius: 4px;" />
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label style="font-weight: 600; font-size: 14px; margin-bottom: 8px; display: block;">Category</label>
+                            <select name="category" onchange="document.getElementById('filterForm').submit();" class="form-control" style="border-radius: 4px;">
+                                <option value="">All Categories</option>
+                                @foreach(var cat in Model.Categories)
+                                {
+                                    if (cat == Model.Category)
+                                    {
+                                        <option value="@cat" selected>@cat</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@cat">@cat</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="font-weight: 600; font-size: 14px; margin-bottom: 8px; display: block;">Sort By</label>
+                            <select name="sort" onchange="document.getElementById('filterForm').submit();" class="form-control" style="border-radius: 4px;">
+                                <option value="">Default Sorting</option>
+                                <option value="price_asc" selected="@(Model.Sort == "price_asc")">Price: Low to High</option>
+                                <option value="price_desc" selected="@(Model.Sort == "price_desc")">Price: High to Low</option>
+                                <option value="name_asc" selected="@(Model.Sort == "name_asc")">Name: A to Z</option>
+                                <option value="name_desc" selected="@(Model.Sort == "name_desc")">Name: Z to A</option>
+                                <option value="newest" selected="@(Model.Sort == "newest")">Newest Arrivals</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group d-flex" style="display: flex; gap: 10px; flex-direction: column;">
+                            <button type="submit" class="btn btn-primary w-100" style="height:40px; border-radius: 4px; font-weight: 600;">Apply Filters</button>
+                            <a asp-action="Index" class="btn btn-secondary w-100" style="height:40px; line-height:40px; text-align:center; border-radius: 4px; display:block; font-weight: 600;">Clear All</a>
+                        </div>
+                    </form>
+                </div>
 
-            @if (Model is null || !Model.Any())
-            {
-                <p class="text-center">No products available.</p>
-            }
-            else
-            {
-                <div class="row">
-                    @foreach (var product in Model)
+                <!-- Right Content Products Grid -->
+                <div class="col-md-9 col-sm-12">
+                    @if (Model.Products is null || !Model.Products.Any())
                     {
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 sm-margin-top-30px">
-                            <div class="contain-product layout-default">
-                                <div class="product-thumb">
-                                    <a asp-controller="Shop" asp-action="Details" asp-route-id="@product.Id" class="link-to-product">
-                                        <img src="@(string.IsNullOrWhiteSpace(product.ImageUrl) ? Url.Content("~/assets/images/products/p-11.jpg") : product.ImageUrl)" alt="@product.Name" width="270" height="270" class="product-thumnail">
-                                    </a>
-                                </div>
-                                <div class="info">
-                                    <b class="categories">@product.Category</b>
-                                    <h4 class="product-title">
-                                        <a asp-controller="Shop" asp-action="Details" asp-route-id="@product.Id" class="pr-name">@product.Name</a>
-                                    </h4>
-                                    <div class="price">
-                                        @if (product.DiscountPrice.HasValue)
-                                        {
-                                            <ins><span class="price-amount"><span class="currencySymbol">£</span>@product.DiscountPrice.Value.ToString("0.00")</span></ins>
-                                            <del><span class="price-amount"><span class="currencySymbol">£</span>@product.Price.ToString("0.00")</span></del>
-                                        }
-                                        else
-                                        {
-                                            <ins><span class="price-amount"><span class="currencySymbol">£</span>@product.Price.ToString("0.00")</span></ins>
-                                        }
-                                    </div>
-                                    <div class="slide-down-box">
-                                        <p class="message">@product.ShortDescription</p>
-                                        <div class="buttons">
-                                            <form asp-controller="Basket" asp-action="Add" method="post" class="add-to-cart-form">
-                                                <input type="hidden" name="productId" value="@product.Id" />
-                                                <input type="hidden" name="quantity" value="1" />
-                                                <button type="submit" class="btn add-to-cart-btn">
-                                                    <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>add to cart
-                                                </button>
-                                            </form>
+                        <div class="alert alert-warning text-center" style="margin-top: 20px;">
+                            <p>No products available matching your criteria.</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            @foreach (var product in Model.Products)
+                            {
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 sm-margin-top-30px" style="margin-bottom: 30px;">
+                                    <div class="contain-product layout-default" style="background: #fff; border-radius: 8px; padding: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: all 0.3s ease;">
+                                        <div class="product-thumb">
+                                            <a asp-controller="Shop" asp-action="Details" asp-route-id="@product.Id" class="link-to-product">
+                                                <img src="@(string.IsNullOrWhiteSpace(product.ImageUrl) ? Url.Content("~/assets/images/products/p-11.jpg") : Url.Content($"~/assets/images/products/{product.ImageUrl}"))" alt="@product.Name" width="270" height="270" style="border-radius: 6px;" class="product-thumnail">
+                                            </a>
+                                        </div>
+                                        <div class="info" style="padding-top: 15px;">
+                                            <b class="categories" style="color: #888; font-size: 12px; display: block; margin-bottom: 5px;">@product.Category</b>
+                                            <h4 class="product-title" style="margin-bottom: 10px; font-size: 16px;">
+                                                <a asp-controller="Shop" asp-action="Details" asp-route-id="@product.Id" class="pr-name" style="color: #333; font-weight: 600;">@product.Name</a>
+                                            </h4>
+                                            <div class="price" style="margin-bottom: 15px;">
+                                                @if (product.DiscountPrice.HasValue)
+                                                {
+                                                    <ins><span class="price-amount" style="color: #e34444; font-weight: bold; font-size: 16px;"><span class="currencySymbol">£</span>@product.DiscountPrice.Value.ToString("0.00")</span></ins>
+                                                    <del><span class="price-amount" style="color: #999; font-size: 14px; margin-left: 8px;"><span class="currencySymbol">£</span>@product.Price.ToString("0.00")</span></del>
+                                                }
+                                                else
+                                                {
+                                                    <ins><span class="price-amount" style="color: #333; font-weight: bold; font-size: 16px;"><span class="currencySymbol">£</span>@product.Price.ToString("0.00")</span></ins>
+                                                }
+                                            </div>
+                                            <div class="slide-down-box">
+                                                <p class="message" style="font-size: 13px; color: #666; margin-bottom: 15px;">@product.ShortDescription</p>
+                                                <div class="buttons">
+                                                    <form asp-controller="Basket" asp-action="Add" method="post" class="add-to-cart-form">
+                                                        <input type="hidden" name="productId" value="@product.Id" />
+                                                        <input type="hidden" name="quantity" value="1" />
+                                                        <button type="submit" class="btn add-to-cart-btn" style="width: 100%; border-radius: 4px; padding: 10px 0; background-color: #79a206; color: white; display:flex; justify-content:center; align-items:center; gap:8px; border:none; border-radius:20px;">
+                                                            <i class="fa fa-cart-arrow-down" aria-hidden="true"></i> add to cart
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
+                        </div>
+                        
+                        <div class="biolife-panigations-block mt-4" style="border-top: 1px solid #eee; padding-top: 20px;">
+                            <ul class="panigation-contain">
+                                @if (Model.Products.HasPreviousPage)
+                                {
+                                    <li><a href="?search=@Model.Search&category=@Model.Category&sort=@Model.Sort&page=@(Model.Products.PageIndex - 1)" class="link-page">Previous</a></li>
+                                }
+
+                                @for (int i = 1; i <= Model.Products.TotalPages; i++)
+                                {
+                                    <li>
+                                        <a href="?search=@Model.Search&category=@Model.Category&sort=@Model.Sort&page=@i" class="link-page @(i == Model.Products.PageIndex ? "current-page" : "")" style="@(i == Model.Products.PageIndex ? "background-color: #79a206; color: white; border-color: #79a206;" : "")">@i</a>
+                                    </li>
+                                }
+
+                                @if (Model.Products.HasNextPage)
+                                {
+                                    <li><a href="?search=@Model.Search&category=@Model.Category&sort=@Model.Sort&page=@(Model.Products.PageIndex + 1)" class="link-page next">Next<i class="fa fa-angle-right" aria-hidden="true" style="margin-left:5px;"></i></a></li>
+                                }
+                            </ul>
                         </div>
                     }
                 </div>
-            }
+            </div>
         </div>
     </div>
 </div>

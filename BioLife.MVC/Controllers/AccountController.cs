@@ -122,7 +122,7 @@ namespace BioLife.MVC.Controllers
 						}
 						//var roles = loggedUser != null ? await _userManager.GetRolesAsync(loggedUser) : [];
 						if (roles.Contains("Admin"))
-							return RedirectToAction("Index", "Home", new { area = "Manage" });
+							return RedirectToAction("Index", "Dashboard", new { area = "Manage" });
 
 						return RedirectToAction("Index", "Home");
 					}
@@ -174,9 +174,6 @@ namespace BioLife.MVC.Controllers
 					ModelState.AddModelError(string.Empty, error.Description);
 				}
 			}
-
-
-
 			return View(model);
 		}
 

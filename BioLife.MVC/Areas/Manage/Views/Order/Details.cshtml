@@ -1,0 +1,77 @@
+@using System
+@model BioLife.Domain.Entities.Order
+
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Order #@Model.Id</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a asp-action="Index">Orders</a></li>
+            <li class="breadcrumb-item active">Details</li>
+        </ol>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">Customer</div>
+                    <div class="card-body">
+                        <p><strong>Name:</strong> @Model.FirstName @Model.LastName</p>
+                        <p><strong>Email:</strong> @Model.Email</p>
+                        <p><strong>Phone:</strong> @Model.Phone</p>
+                        <p><strong>Address:</strong> @Model.Address, @Model.City, @Model.PostalCode, @Model.Country</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">Status</div>
+                    <div class="card-body">
+                        <form asp-action="UpdateStatus" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <div class="mb-3">
+                                <label class="form-label">Order status</label>
+                                <select name="status" class="form-select">
+                                    @foreach (var status in Enum.GetValues(typeof(BioLife.Domain.Enums.OrderStatus)))
+                                    {
+                                        <option value="@status" selected="@(status.Equals(Model.OrderStatus) ? "selected" : null)">@status</option>
+                                    }
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">Items</div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Unit price</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrderItems)
+                        {
+                            <tr>
+                                <td>@item.ProductName</td>
+                                <td>@item.Quantity</td>
+                                <td>?@item.UnitPrice.ToString("0.00")</td>
+                                <td>?@((item.UnitPrice * item.Quantity).ToString("0.00"))</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="text-end">
+                    <strong>Total: ?@Model.TotalAmount.ToString("0.00")</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

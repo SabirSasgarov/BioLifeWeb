@@ -13,8 +13,7 @@ namespace BioLife.Application.Services
 	{
 		public async Task<List<Product>> GetAllAsync()
 		{
-			var products = await appDbContext.Products.OrderByDescending(p => p.Id).ToListAsync();
-			return products;
+			return await appDbContext.Products.OrderByDescending(p => p.Id).ToListAsync(); 
 		}
 
 		public async Task<List<Product>> GetFeaturedAsync()
@@ -25,8 +24,7 @@ namespace BioLife.Application.Services
 
 		public async Task<Product?> GetByIdAsync(int id)
 		{
-			var product = await appDbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
-			return product;
+			return await appDbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
 		}
 
 		public async Task CreateAsync(Product product)
@@ -51,5 +49,38 @@ namespace BioLife.Application.Services
 			}
 		}
 
+		public IQueryable<Product> GetFilteredQuery(string? search, string? category, string? sort)
+		{
+			var query = appDbContext.Products.Where(p=>!p.IsDeleted).AsQueryable();
+			if(!string.IsNullOrWhiteSpace(category) && category != "all")
+			{
+				query = query.Where(p => p.Category == category);
+			}
+			if(!string.IsNullOrWhiteSpace(search))
+			{
+				query = query.Where(p => p.Name.Contains(search) ||
+				(p.Description != null && p.Description.Contains(search)));
+			}
+			query = sort switch
+			{
+				"price_asc" => query.OrderBy(p => p.DiscountPrice ?? p.Price),
+				"price_desc" => query.OrderByDescending(p => p.DiscountPrice ?? p.Price),
+				"name_asc" => query.OrderBy(p => p.Name),
+				"name_desc" => query.OrderByDescending(p => p.Name),
+				"newest" => query.OrderByDescending(p => p.CreatedDate),
+				"feateured" => query.OrderByDescending(p => p.IsFeatured).ThenByDescending(p=>p.CreatedDate),
+				_ => query.OrderByDescending(p => p.Id)
+			};
+			return query;
+		}
+
+		public async Task<List<string>> GetCategoriesAsync() =>
+			await appDbContext.Products
+			.Where(p => !p.IsDeleted && p.Category != null)
+			.Select(p => p.Category!)
+			.Distinct()
+			.OrderBy(c => c)
+			.ToListAsync();
+		
 	}
 }
