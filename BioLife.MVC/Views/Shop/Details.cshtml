@@ -1,5 +1,151 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@model BioLife.MVC.Models.ProductDetailViewModel
+
 @{
+    ViewData["Title"] = Model.Product.Name;
+    var product = Model.Product;
+    var imageUrl = string.IsNullOrWhiteSpace(product.ImageUrl)
+        ? Url.Content("~/assets/images/details-product/detail_01.jpg")
+        : Url.Content($"~/assets/images/products/{product.ImageUrl}");
+    var currentPrice = product.DiscountPrice ?? product.Price;
+    var averageRating = Model.Reviews.Any() ? Model.Reviews.Average(r => (double)r.Rating) : product.StarRating;
+}
+
+<div class="page-contain has-header-offset">
+    <div id="main-content" class="main-content">
+        <div class="container sm-margin-top-50px xs-margin-top-30px" style="margin-top:100px;">
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div style="background:#fff; border:1px solid #eeeeee; border-radius:8px; padding:24px; text-align:center;">
+                        <img src="@imageUrl" alt="@product.Name" class="img-responsive center-block" style="max-height:520px; object-fit:contain;" />
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div style="padding:10px 0 0;">
+                        <span style="display:inline-block; color:#79a206; font-weight:600; margin-bottom:8px;">@product.Category</span>
+                        <h1 style="font-size:34px; line-height:1.2; margin:0 0 15px; color:#333;">@product.Name</h1>
+
+                        <div style="margin-bottom:15px; color:#f6b01e;">
+                            @for (var i = 1; i <= 5; i++)
+                            {
+                                <i class="fa @(i <= Math.Round(averageRating) ? "fa-star" : "fa-star-o")"></i>
+                            }
+                            <span style="color:#666; margin-left:8px;">@Model.Reviews.Count review@(Model.Reviews.Count == 1 ? "" : "s")</span>
+                        </div>
+
+                        <div style="margin-bottom:20px;">
+                            <ins style="text-decoration:none;">
+                                <span style="font-size:28px; font-weight:700; color:#e34444;">£@currentPrice.ToString("0.00")</span>
+                            </ins>
+                            @if (product.DiscountPrice.HasValue)
+                            {
+                                <del style="margin-left:10px; color:#999; font-size:18px;">£@product.Price.ToString("0.00")</del>
+                            }
+                        </div>
+
+                        <p style="font-size:15px; line-height:1.8; color:#555; margin-bottom:25px;">
+                            @(string.IsNullOrWhiteSpace(product.Description) ? product.ShortDescription : product.Description)
+                        </p>
+
+                        <dl class="dl-horizontal" style="margin-bottom:25px;">
+                            <dt>SKU</dt>
+                            <dd>@product.SKU</dd>
+                            <dt>Availability</dt>
+                            <dd>@(product.StockQuantity > 0 ? $"{product.StockQuantity} in stock" : "Out of stock")</dd>
+                        </dl>
+
+                        <form asp-controller="Basket" asp-action="Add" method="post" class="add-to-cart-form" style="max-width:360px;">
+                            <input type="hidden" name="productId" value="@product.Id" />
+                            <div class="input-group" style="margin-bottom:15px;">
+                                <span class="input-group-addon">Qty</span>
+                                <input type="number" name="quantity" value="1" min="1" max="@Math.Max(product.StockQuantity, 1)" class="form-control" />
+                            </div>
+                            <button type="submit" class="btn btn-success btn-lg" style="width:100%; border-radius:22px; background-color:#79a206; border-color:#79a206;" @(product.StockQuantity <= 0 ? "disabled" : "")>
+                                <i class="fa fa-cart-arrow-down" aria-hidden="true"></i> Add to cart
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top:55px;">
+                <div class="col-md-8 col-sm-12">
+                    <h3 style="font-size:24px; margin-bottom:20px;">Customer comments</h3>
+
+                    @if (TempData["ReviewSuccess"] is not null)
+                    {
+                        <div class="alert alert-success">@TempData["ReviewSuccess"]</div>
+                    }
+                    @if (TempData["ReviewError"] is not null)
+                    {
+                        <div class="alert alert-danger">@TempData["ReviewError"]</div>
+                    }
+
+                    @if (Model.Reviews.Any())
+                    {
+                        foreach (var review in Model.Reviews)
+                        {
+                            <div style="border-bottom:1px solid #eeeeee; padding:18px 0;">
+                                <div style="display:flex; justify-content:space-between; gap:15px; flex-wrap:wrap;">
+                                    <strong style="color:#333;">@review.UserName</strong>
+                                    <span style="color:#888;">@review.CreatedDate.ToString("MMM dd, yyyy")</span>
+                                </div>
+                                <div style="color:#f6b01e; margin:7px 0;">
+                                    @for (var i = 1; i <= 5; i++)
+                                    {
+                                        <i class="fa @(i <= Math.Round(review.Rating) ? "fa-star" : "fa-star-o")"></i>
+                                    }
+                                </div>
+                                <p style="color:#555; line-height:1.7; margin:0;">@review.Comment</p>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">No comments yet. Be the first to review this product.</div>
+                    }
+                </div>
+
+                <div class="col-md-4 col-sm-12">
+                    <div style="background:#f7f6f2; border-radius:8px; padding:24px;">
+                        <h3 style="font-size:22px; margin-top:0;">Leave a comment</h3>
+
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <form asp-action="AddReview" asp-route-id="@product.Id" method="post">
+                                @Html.AntiForgeryToken()
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group">
+                                    <label asp-for="NewReview.Rating">Rating</label>
+                                    <select asp-for="NewReview.Rating" name="Rating" class="form-control">
+                                        <option value="">Select rating</option>
+                                        <option value="5">5 - Excellent</option>
+                                        <option value="4">4 - Good</option>
+                                        <option value="3">3 - Average</option>
+                                        <option value="2">2 - Poor</option>
+                                        <option value="1">1 - Bad</option>
+                                    </select>
+                                    <span asp-validation-for="NewReview.Rating" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="NewReview.Comment">Comment</label>
+                                    <textarea asp-for="NewReview.Comment" name="Comment" class="form-control" rows="5" placeholder="Share your thoughts..."></textarea>
+                                    <span asp-validation-for="NewReview.Comment" class="text-danger"></span>
+                                </div>
+                                <button type="submit" class="btn btn-success" style="background-color:#79a206; border-color:#79a206;">Submit review</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <p style="margin-bottom:18px;">Please sign in to leave a comment.</p>
+                            <a asp-controller="Account" asp-action="Login" class="btn btn-primary">Sign in</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

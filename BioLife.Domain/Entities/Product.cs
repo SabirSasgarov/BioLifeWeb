@@ -15,5 +15,6 @@ namespace BioLife.Domain.Entities
 		public string? Category { get; set; }
 		public int StarRating { get; set; }
 		public bool IsFeatured { get; set; }
+		public List<Review> Reviews { get; set; }
 	}
 }

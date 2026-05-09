@@ -1,0 +1,99 @@
+﻿@model BioLife.Domain.Entities.Order
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<!--Hero Section-->
+<div class="hero-section hero-background">
+    <h1 class="page-title">Order Details</h1>
+</div>
+
+<!--Navigation section-->
+<div class="container">
+    <nav class="biolife-nav">
+        <ul>
+            <li class="nav-item"><a asp-controller="Home" asp-action="Index" class="permal-link">Home</a></li>
+            <li class="nav-item"><a asp-action="Index" class="permal-link">Profile</a></li>
+            <li class="nav-item"><a asp-action="Orders" class="permal-link">My Orders</a></li>
+            <li class="nav-item"><span class="current-page">Order #@Model.Id</span></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="page-contain">
+    <div id="main-content" class="main-content" style="padding-top: 30px; padding-bottom: 50px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="card shadow-sm" style="border: 1px solid #e1e1e1; padding: 25px; border-radius: 5px; margin-bottom: 30px;">
+                        <h2 class="mb-4" style="margin-bottom: 20px;">Order #@Model.Id</h2>
+
+                        <div class="row mb-4" style="margin-bottom: 20px;">
+                            <div class="col-md-6" style="margin-bottom: 15px;">
+                                <h4>Order Summary</h4>
+                                <p style="margin: 5px 0;"><strong>Date:</strong> @Model.CreatedDate.ToString("MMMM dd, yyyy HH:mm")</p>
+                                <p style="margin: 5px 0;"><strong>Status:</strong> <span class="badge" style="padding: 5px 10px; background: #eee; border-radius: 3px;">@Model.OrderStatus</span></p>
+                                <p style="margin: 5px 0;"><strong>Total Amount:</strong> £@Model.TotalAmount</p>
+                            </div>
+                            <div class="col-md-6" style="margin-bottom: 15px;">
+                                <h4>Shipping Address</h4>
+                                <p style="margin: 5px 0;">@Model.Address, @Model.City, @Model.Country</p>
+                            </div>
+                        </div>
+
+                        <hr style="margin: 20px 0;" />
+
+                        <h4 style="margin-bottom: 15px;">Order Items</h4>
+                        @if (Model.OrderItems != null && Model.OrderItems.Any())
+                        {
+                            <table class="table" style="width: 100%; text-align: left;">
+                                <thead>
+                                    <tr>
+                                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Product</th>
+                                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Price</th>
+                                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Quantity</th>
+                                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.OrderItems)
+                                    {
+                                        <tr>
+                                            <td style="padding: 10px; border-bottom: 1px solid #eee;">
+                                                @if (item.Product != null)
+                                                {
+                                                    <span>@item.Product.Name</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>Product #@item.ProductId</span>
+                                                }
+                                            </td>
+                                            <td style="padding: 10px; border-bottom: 1px solid #eee;">£@item.UnitPrice</td>
+                                            <td style="padding: 10px; border-bottom: 1px solid #eee;">@item.Quantity</td>
+                                            <td style="padding: 10px; border-bottom: 1px solid #eee;">£@(item.UnitPrice * item.Quantity)</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3" style="text-align: right; padding: 15px 10px; font-weight: bold;">Total:</td>
+                                        <td style="padding: 15px 10px; font-weight: bold;">£@Model.TotalAmount</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        }
+                        else
+                        {
+                            <p class="text-muted">No items found for this order.</p>
+                        }
+
+                        <div style="margin-top: 20px;">
+                            <a asp-action="Orders" class="btn btn-submit" style="padding: 10px 20px; background-color: #333; color: white; text-decoration: none; border-radius: 3px;">Back to Orders</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

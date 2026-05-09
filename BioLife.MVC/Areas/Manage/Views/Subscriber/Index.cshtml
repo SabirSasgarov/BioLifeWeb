@@ -1,0 +1,60 @@
+@model List<BioLife.Domain.Entities.Subscriber>
+
+@{
+    ViewData["Title"] = "Manage Subscribers";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Manage Subscribers</h2>
+    <a asp-action="SendEmail" class="btn btn-primary">Send Email to All</a>
+</div>
+
+@if (TempData["DeleteSuccess"] != null)
+{
+    <div class="alert alert-success">@TempData["DeleteSuccess"]</div>
+}
+@if (TempData["DeleteError"] != null)
+{
+    <div class="alert alert-danger">@TempData["DeleteError"]</div>
+}
+@if (TempData["EmailSuccess"] != null)
+{
+    <div class="alert alert-success">@TempData["EmailSuccess"]</div>
+}
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Subscribed At</th>
+            <th>Is Active</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var subscriber in Model)
+            {
+                <tr>
+                    <td>@subscriber.Id</td>
+                    <td>@subscriber.Email</td>
+                    <td>@subscriber.SubscribedAt.ToString("g")</td>
+                    <td>@(subscriber.IsActive ? "Yes" : "No")</td>
+                    <td>
+                        <form asp-action="Delete" asp-route-id="@subscriber.Id" method="post" style="display:inline-block;" onsubmit="return confirm('Are you sure you want to delete this subscriber?');">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" class="text-center">No subscribers found.</td>
+            </tr>
+        }
+    </tbody>
+</table>

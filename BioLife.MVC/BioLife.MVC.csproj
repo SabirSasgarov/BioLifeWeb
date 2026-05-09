@@ -25,4 +25,8 @@
     <ProjectReference Include="..\BioLife.Infrastructure\BioLife.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\uploads\avatars\" />
+  </ItemGroup>
+
 </Project>

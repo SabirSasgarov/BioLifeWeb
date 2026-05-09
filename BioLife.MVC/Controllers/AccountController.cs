@@ -67,37 +67,31 @@ namespace BioLife.MVC.Controllers
 		public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
 		{
 			ViewData["ReturnUrl"] = returnUrl;
-			if (ModelState.IsValid)
+			if (!ModelState.IsValid)
+				return View(model);
+
+			var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+			if (result.IsLockedOut)
 			{
-				var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-				if (result.IsLockedOut)
-				{
-					var lockedUser = await _userManager.FindByEmailAsync(model.Email);
-					var lockoutEnd = lockedUser != null ? await _userManager.GetLockoutEndDateAsync(lockedUser) : null;
-					var minutesLeft = lockoutEnd.HasValue ? (int)Math.Ceiling((lockoutEnd.Value - DateTimeOffset.UtcNow).TotalMinutes) : 15;
-					ModelState.AddModelError(string.Empty, "Your account is locked due to multiple failed login attempts. Please try again later.");
-					return View(model);
-				}
+				ModelState.AddModelError(string.Empty, "Your account is locked due to multiple failed login attempts. Please try again later.");
+				return View(model);
+			}
 
-				if (result.Succeeded)
+			if (result.Succeeded)
+			{
+				var user = await _userManager.FindByEmailAsync(model.Email);
+				if (user != null)
 				{
-					var user = await _userManager.FindByEmailAsync(model.Email);
-					if (user != null)
+					var roles = await _userManager.GetRolesAsync(user);
+					bool isAdmin = roles.Contains("Admin");
+					if (!isAdmin)
 					{
-						var roles = await _userManager.GetRolesAsync(user);
-
-						if (roles.Contains("Member"))
+						if (!TryConsumeTwoFactorRememberOnce(user.Id))
 						{
-							if (TryConsumeTwoFactorRememberOnce(user.Id))
-							{
-								return RedirectToAction("Index", "Home");
-							}
-
 							await _signInManager.SignOutAsync();
 							var code = RandomNumberGenerator.GetInt32(100000, 999999).ToString();
 
 							var sessionToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
-
 							var codeHash = Convert.ToBase64String(SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(code)));
 
 							var cacheKey = $"2FA_{user.Id}_{sessionToken}";
@@ -106,29 +100,34 @@ namespace BioLife.MVC.Controllers
 
 							await _emailService.SendEmailAsync(user.Email,
 								"Your BioLife 2FA Code", $"Your 2FA code is: {code}. You have 5 minutes to use it");
+
 							TempData["2FA_UserId"] = user.Id;
 							TempData["2FA_Session"] = sessionToken;
+							TempData["2FA_ReturnUrl"] = returnUrl;
+							TempData["2FA_RememberMe"] = model.RememberMe;
 							return RedirectToAction("TwoFactorVerify", new { returnUrl, rememberMe = model.RememberMe });
 						}
 
+						if (model.RememberMe)
+						{
+							SetTwoFactorRememberOnce(user.Id);
+						}
+
+						await SetBasketCountCookie(user.Id);
+
 						if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
 						{
-							return RedirectToAction(returnUrl);
+							return Redirect(returnUrl);
 						}
-						var loggedUser = await _userManager.FindByEmailAsync(model.Email);
-						if (loggedUser != null)
-						{
-							await SetBasketCountCookie(loggedUser.Id);
-						}
-						//var roles = loggedUser != null ? await _userManager.GetRolesAsync(loggedUser) : [];
-						if (roles.Contains("Admin"))
-							return RedirectToAction("Index", "Dashboard", new { area = "Manage" });
-
-						return RedirectToAction("Index", "Home");
 					}
+
+					if (isAdmin)
+						return RedirectToAction("Index", "Dashboard", new { area = "Manage" });
+
+					return RedirectToAction("Index", "Home");
 				}
-				ModelState.AddModelError(string.Empty, "Invalid login attempt.");
 			}
+			ModelState.AddModelError(string.Empty, "Invalid login attempt.");
 			return View(model);
 		}
 
@@ -270,7 +269,7 @@ namespace BioLife.MVC.Controllers
 				}
 				await _userManager.AddLoginAsync(user, info);
 				await _signInManager.SignInAsync(user, isPersistent: false);
-				await SetBasketCountCookie(user.Id); 
+				await SetBasketCountCookie(user.Id);
 
 				if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
 				{

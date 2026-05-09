@@ -60,7 +60,7 @@
                         </li>
                         @if (User.Identity?.IsAuthenticated == true)
                         {
-                            <li><a href="javascript:void(0)" class="login-link"><i class="biolife-icon icon-login"></i>Hello, @User.Identity.Name</a></li>
+                            <li><a asp-controller="Profile" asp-action="Index" class="login-link"><i class="biolife-icon icon-login"></i>Hello, @User.Identity.Name</a></li>
                             <li>
                                 <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline-block;">
                                     <button type="submit" class="login-link" style="background:transparent; border:none; padding:0; font-size:14px; font-family:inherit; color:inherit; cursor:pointer;">
@@ -481,49 +481,6 @@
                                                         <li class="menu-item"><a href="home-05.html">Home 05</a></li>
                                                     </ul>
                                                 </div>
-                                            <div class="col-lg-3 col-md-3 col-xs-12 md-margin-bottom-0 xs-margin-bottom-25">
-                                                <div class="wrap-custom-menu vertical-menu">
-                                                    <h4 class="menu-title">Inner Pages</h4>
-                                                    <ul class="menu">
-                                                        <li class="menu-item"><a href="blog-post.html">Blog Single</a></li>
-                                                        <li class="menu-item"><a href="blog-v01.html">Blog Style 01</a></li>
-                                                        <li class="menu-item"><a href="blog-v02.html">Blog Style 02</a></li>
-                                                        <li class="menu-item"><a href="blog-v03.html">Blog Style 03</a></li>
-                                                        <li class="menu-item"><a href="contact.html">Contact Us</a></li>
-                                                        <li class="menu-item"><a href="about-us.html">About Us</a></li>
-                                                        <li class="menu-item"><a href="checkout.html">Checkout</a></li>
-                                                        <li class="menu-item"><a href="shopping-cart.html">Shopping Cart</a></li>
-                                                        <li class="menu-item"><a href="login.html">Login/Register</a></li>
-                                                        <li class="menu-item"><a href="404.html">404</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-xs-12 md-margin-bottom-0 xs-margin-bottom-25">
-                                                <div class="wrap-custom-menu vertical-menu">
-                                                    <h4 class="menu-title">Category Pages</h4>
-                                                    <ul class="menu">
-                                                        <li class="menu-item"><a href="category-grid-3-cols.html">Grid 3 Cols</a></li>
-                                                        <li class="menu-item"><a href="category-grid.html">Grid 4 Cols</a></li>
-                                                        <li class="menu-item"><a href="category-grid-6-cols.html">Grid 6 Cols</a></li>
-                                                        <li class="menu-item"><a href="category-grid-left-sidebar.html">Grid Left Sidebar</a></li>
-                                                        <li class="menu-item"><a href="category-grid-right-sidebar.html">Grid Right Sidebar</a></li>
-                                                        <li class="menu-item"><a href="category-list.html">List Full</a></li>
-                                                        <li class="menu-item"><a href="category-list-left-sidebar.html">List Left Sidebar</a></li>
-                                                        <li class="menu-item"><a href="category-list-right-sidebar.html">List Right Sidebar</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-xs-12 md-margin-bottom-0 xs-margin-bottom-25">
-                                                <div class="wrap-custom-menu vertical-menu">
-                                                    <h4 class="menu-title">Product Types</h4>
-                                                    <ul class="menu">
-                                                        <li class="menu-item"><a href="single-product-simple.html">Simple</a></li>
-                                                        <li class="menu-item"><a href="single-product-grouped.html">Grouped</a></li>
-                                                        <li class="menu-item"><a href="single-product.html">Variable</a></li>
-                                                        <li class="menu-item"><a href="single-product-external.html">External/Affiliate</a></li>
-                                                        <li class="menu-item"><a href="single-product-onsale.html">Countdown</a></li>
-                                                    </ul>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -623,7 +580,8 @@
                                             <option value="butter_eggs">Butter & Eggs</option>
                                             <option value="fastfood">Fastfood</option>
                                             <option value="fresh_meat">Fresh Meat</option>
-                                            <option value="fresh_onion">Fresh Onion</option>                                          <option value="fresh_onion">Fresh Onion</option>
+                                            <option value="fresh_onion">Fresh Onion</option>
+                                            <option value="fresh_onion">Fresh Onion</option>
                                             <option value="papaya_crisps">Papaya & Crisps</option>
                                             <option value="oatmeal">Oatmeal</option>
                                         </select>

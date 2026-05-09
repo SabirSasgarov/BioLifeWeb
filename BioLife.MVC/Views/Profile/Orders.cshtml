@@ -1,0 +1,70 @@
+﻿@model IEnumerable<BioLife.Domain.Entities.Order>
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<!--Hero Section-->
+<div class="hero-section hero-background">
+    <h1 class="page-title">My Orders</h1>
+</div>
+
+<!--Navigation section-->
+<div class="container">
+    <nav class="biolife-nav">
+        <ul>
+            <li class="nav-item"><a asp-controller="Home" asp-action="Index" class="permal-link">Home</a></li>
+            <li class="nav-item"><a asp-action="Index" class="permal-link">Profile</a></li>
+            <li class="nav-item"><span class="current-page">My Orders</span></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="page-contain">
+    <div id="main-content" class="main-content" style="padding-top: 30px; padding-bottom: 50px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="card shadow-sm" style="border: 1px solid #e1e1e1; padding: 25px; border-radius: 5px;">
+                        <h2 class="mb-4" style="margin-bottom: 20px;">Order History</h2>
+
+                        @if (Model != null && Model.Any())
+                        {
+                            <table class="table" style="width: 100%; text-align: left;">
+                                <thead>
+                                    <tr>
+                                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Order #</th>
+                                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Date</th>
+                                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Total</th>
+                                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Status</th>
+                                        <th style="padding: 10px; border-bottom: 1px solid #ddd;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in Model)
+                                    {
+                                        <tr>
+                                            <td style="padding: 10px; border-bottom: 1px solid #eee;">#@order.Id</td>
+                                            <td style="padding: 10px; border-bottom: 1px solid #eee;">@order.CreatedDate.ToString("MMM dd, yyyy")</td>
+                                            <td style="padding: 10px; border-bottom: 1px solid #eee;">£@order.TotalAmount</td>
+                                            <td style="padding: 10px; border-bottom: 1px solid #eee;">@order.OrderStatus</td>
+                                            <td style="padding: 10px; border-bottom: 1px solid #eee;">
+                                                <a asp-action="OrderDetails" asp-route-id="@order.Id" class="btn btn-sm" style="background-color: #7faf51; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px;">Details</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <div class="text-center" style="padding: 30px;">
+                                <p class="text-muted" style="font-size: 18px;">You haven't placed any orders yet.</p>
+                                <a asp-controller="Shop" asp-action="Index" class="btn btn-submit btn-bold" style="padding: 10px 20px; background-color: #7faf51; color: white; border: none; text-decoration: none;">Start Shopping</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

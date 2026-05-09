@@ -1,0 +1,27 @@
+@{
+    ViewData["Title"] = "Send Email to Subscribers";
+}
+
+<h2>Send Email to All Subscribers</h2>
+
+@if (TempData["EmailError"] != null)
+{
+    <div class="alert alert-danger">@TempData["EmailError"]</div>
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="SendEmail" method="post">
+            <div class="form-group mb-3">
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" name="subject" class="form-control" required />
+            </div>
+            <div class="form-group mb-3">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" class="form-control" rows="10" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Send Emails</button>
+            <a asp-action="Index" class="btn btn-secondary mt-2 ms-2">Back to List</a>
+        </form>
+    </div>
+</div>

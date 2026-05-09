@@ -7,3 +7,6 @@ global using BioLife.Domain.Common;
 global using Microsoft.Extensions.Configuration;
 global using BioLife.Persistence.Contexts;
 global using Microsoft.AspNetCore.Identity;
+global using BioLife.Application.Services;
+global using BioLife.Infrastructure.Services;
+global using BioLife.Persistence.Services;

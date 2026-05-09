@@ -1,8 +1,4 @@
-﻿using BioLife.Application.Services;
-using BioLife.Infrastructure.Services;
-using BioLife.Persistence.Services;
-
-namespace BioLife.Persistence
+﻿namespace BioLife.Persistence
 {
 	public static class DependencyInjection
 	{
@@ -32,6 +28,9 @@ namespace BioLife.Persistence
 			services.AddScoped<IEmailService, EmailService>();
 			services.AddScoped<IBasketService, BasketService>();
 			services.AddScoped<IOrderService, OrderService>();
+			services.AddScoped<IProductService, ProductService>();
+			services.AddScoped<ISubscriberService, SubscriberService>();
+			services.AddScoped<IReviewService, ReviewService>();
 			return services;
 		}
 	}

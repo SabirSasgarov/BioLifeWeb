@@ -2800,6 +2800,35 @@
             </div>
         </div>
 
+        <!-- Block 11: Newsletter Subscription-->
+        <div class="newsletter-block sm-margin-top-76px sm-margin-bottom-77px xs-margin-top-80px xs-margin-bottom-80px">
+            <div class="container">
+                <div class="biolife-title-box">
+                    <h3 class="main-title">Subscribe to our Newsletter</h3>
+                </div>
+                <div class="newsletter-form sm-margin-top-30px">
+                    @if (TempData["SubscriptionSuccess"] != null)
+                    {
+                        <div class="alert alert-success" style="max-width: 600px; margin: 0 auto 15px auto; text-align: center;">
+                            @TempData["SubscriptionSuccess"]
+                        </div>
+                    }
+                    @if (TempData["SubscriptionError"] != null)
+                    {
+                        <div class="alert alert-danger" style="max-width: 600px; margin: 0 auto 15px auto; text-align: center; color: red;">
+                            @TempData["SubscriptionError"]
+                        </div>
+                    }
+                    <form asp-controller="Home" asp-action="Subscribe" method="post" class="form-newsletter">
+                        <div class="form-group" style="display: flex; gap: 10px; max-width: 600px; margin: 0 auto;">
+                            <input type="email" name="email" class="form-control" placeholder="Enter your email address" required style="flex: 1;" />
+                            <button type="submit" class="btn btn-submit" style="background-color: #333; color: #fff; padding: 10px 20px;">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </div>
